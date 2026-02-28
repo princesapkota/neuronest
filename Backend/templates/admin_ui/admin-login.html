@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Portal Admin Login - NeuroNest</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+        .login-container {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 12px;
+            width: 350px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+        }
+        h2 { text-align: center; margin-bottom: 25px; }
+        .field { margin-bottom: 20px; }
+        .field label { display: block; margin-bottom: 6px; font-size: 14px; }
+        .field input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-btn:hover { background: #2563eb; }
+        .error { color: #f87171; margin-bottom: 15px; font-size: 14px; }
+        .back-link { text-align: center; margin-top: 15px; font-size: 14px; }
+        .back-link a { color: #93c5fd; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Portal Admin Login</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="error">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- action can be omitted; posting to same URL is standard -->
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="field">
+            <label>Username or Email</label>
+            <input type="text" name="username" required>
+        </div>
+
+        <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <div class="back-link">
+        <a href="{% url 'index' %}">← Back to Home</a>
+    </div>
+</div>
+
+</body>
+</html>

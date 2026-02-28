@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-name">NeuroNest</div>
+    </div>
+
+    <nav class="topbar-actions">
+      <span class="topbar-role">System Admin</span>
+      <a class="btn btn-outline" href="/">Logout</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-head">
+      <h1 class="page-title">Admin Dashboard</h1>
+      <p class="page-subtitle">Manage employees, patients, and system access.</p>
+    </section>
+
+    <section class="cards">
+      <a class="card" href="{% url 'employees_list' %}">
+        <h3 class="card-title">Employee Management</h3>
+        <p class="card-text">Create employee accounts, reset access, and maintain staff records.</p>
+        <span class="card-link">Open</span>
+      </a>
+
+      <a class="card" href="admin-patients.html">
+        <h3 class="card-title">Patient Management</h3>
+        <p class="card-text">View and update patient profiles and hospital patient IDs.</p>
+        <span class="card-link">Open</span>
+      </a>
+
+      <div class="card card-muted">
+        <h3 class="card-title">System Overview</h3>
+        <p class="card-text">Basic metrics and logs can be added here later for audit tracking.</p>
+        <span class="card-link">Coming soon</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

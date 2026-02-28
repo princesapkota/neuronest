@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+</head>
+<body>
+  <div class="landing-header">
+    <div class="logo-container">
+      <div class="logo-frame"></div>
+      <div class="logo-text">NeuroNest</div>
+    </div>
+    <div class="nav-buttons">
+      <a href="#features" class="btn btn-outline">Learn More</a>
+    </div>
+  </div>
+
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">No compromises in your health</h1>
+      <p class="hero-subtitle">Clinical AI diagnostics with review workflows built for real hospital operations.</p>
+
+      <div class="user-selection">
+        <h3>Get Started</h3>
+        <div class="selection-buttons">
+          <a href="{% url 'patient_login' %}" class="selection-btn">Continue as Patient</a>
+          <a href="{% url 'employee_login' %}" class="selection-btn">Continue as Employee</a>
+          <a href="{% url 'admin_login' %}" class="selection-btn">Admin Login</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <div class="image-placeholder">
+        <span style="z-index: 1; position: relative;">AI-Powered Diagnostics</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="features-section" id="features">
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3 class="feature-title">Brain Tumor Segmentation</h3>
+        <p class="feature-description">MRI segmentation and visual outputs for review workflows.</p>
+      </div>
+      <div class="feature-card">
+        <h3 class="feature-title">Fracture Detection</h3>
+        <p class="feature-description">X-ray fracture screening with confident classifications.</p>
+      </div>
+      <div class="feature-card">
+        <h3 class="feature-title">Pneumonia Classification</h3>
+        <p class="feature-description">Chest X-ray screening with clear results for patients.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

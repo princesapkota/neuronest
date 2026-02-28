@@ -1,103 +1,123 @@
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.models import User
-from django.db import transaction
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
-from django.contrib.auth.tokens import default_token_generator
+from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.core.mail import send_mail
-from django.conf import settings
-from django.urls import reverse
+from django.contrib.auth.tokens import default_token_generator
 
-from .forms import PatientSignupForm
-from .models import Role
+
+TEMPLATE_LANDING = "index.html"                  # change if your landing filename is different
+TEMPLATE_PATIENT_SIGNUP = "accounts/patient-signup.html"    # change if your filename is different
+TEMPLATE_VERIFY_SENT = "accounts/verify-email-sent.html"    # change if your filename is different
+
+
+def index(request):
+    return render(request, TEMPLATE_LANDING)
 
 
 def patient_signup(request):
     """
-    Creates a patient user + profile, but keeps the account inactive until email verification.
+    Patient signup (self signup).
+    Expects POST fields:
+      full_name, email, sex, age, password1, password2
     """
     if request.method == "POST":
-        form = PatientSignupForm(request.POST)
-        if form.is_valid():
-            with transaction.atomic():
-                email = form.cleaned_data["email"].lower()
+        full_name = request.POST.get("full_name", "").strip()
+        email = request.POST.get("email", "").strip().lower()
+        sex = request.POST.get("sex", "").strip()
+        age = request.POST.get("age", "").strip()
+        password1 = request.POST.get("password1", "")
+        password2 = request.POST.get("password2", "")
 
-                # Create User (auth_user)
-                user = User.objects.create_user(
-                    username=email,  # simplest: use email as username
-                    email=email,
-                    password=form.cleaned_data["password"],
-                    is_active=False,  # must verify email first
-                )
+        if not all([full_name, email, sex, age, password1, password2]):
+            messages.error(request, "Please fill all fields.")
+            return render(request, TEMPLATE_PATIENT_SIGNUP)
 
-                # Update Profile created by your signals
-                profile = user.profile
-                profile.role = Role.PATIENT
-                profile.full_name = form.cleaned_data["full_name"]
-                profile.hospital_patient_id = form.cleaned_data["hospital_patient_id"]
-                profile.sex = form.cleaned_data["sex"]
-                profile.age = form.cleaned_data["age"]
-                profile.save()
+        if password1 != password2:
+            messages.error(request, "Passwords do not match.")
+            return render(request, TEMPLATE_PATIENT_SIGNUP)
 
-            # Send verification email
-            send_verification_email(request, user)
+        if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():
+            messages.error(request, "An account with this email already exists.")
+            return render(request, TEMPLATE_PATIENT_SIGNUP)
 
-            # Show "check your email" page
-            return redirect("verify_email_sent")
-    else:
-        form = PatientSignupForm()
+        try:
+            age_int = int(age)
+            if age_int <= 0 or age_int > 120:
+                raise ValueError()
+        except ValueError:
+            messages.error(request, "Age must be a valid number.")
+            return render(request, TEMPLATE_PATIENT_SIGNUP)
 
-    return render(request, "accounts/patient-signup.html", {"form": form})
+        # Create user (we use email as username for simplicity)
+        user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password1,
+            is_active=False,  # email verification required
+        )
+
+        # Fill profile
+        user.profile.full_name = full_name
+        user.profile.sex = sex
+        user.profile.age = age_int
+        user.profile.role = "patient"
+        user.profile.save()
+
+        _send_verification_email(request, user)
+        return redirect("verify_email_sent")
+
+    return render(request, TEMPLATE_PATIENT_SIGNUP)
 
 
 def verify_email_sent(request):
-    """
-    Simple page that tells user to check inbox.
-    """
-    return render(request, "accounts/verify-email-sent.html")
-
-
-def send_verification_email(request, user: User):
-    """
-    Sends a verification link containing (uidb64, token).
-    """
-    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-    token = default_token_generator.make_token(user)
-
-    verify_link = request.build_absolute_uri(
-        reverse("verify_email", kwargs={"uidb64": uidb64, "token": token})
-    )
-
-    subject = "Verify your NeuroNest account"
-    message = (
-        "Thanks for signing up for NeuroNest.\n\n"
-        "Please verify your email by clicking the link below:\n"
-        f"{verify_link}\n\n"
-        "If you did not create this account, you can ignore this email."
-    )
-
-    send_mail(
-        subject=subject,
-        message=message,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[user.email],
-        fail_silently=False,
-    )
+    return render(request, TEMPLATE_VERIFY_SENT)
 
 
 def verify_email(request, uidb64, token):
     """
-    When user clicks email link, validate token and activate account.
+    Verify email link -> activate user.
     """
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except (User.DoesNotExist, ValueError, TypeError, OverflowError):
+    except Exception:
         user = None
 
     if user and default_token_generator.check_token(user, token):
         user.is_active = True
-        user.save(update_fields=["is_active"])
-        return render(request, "accounts/verify-email-success.html")
+        user.save()
+        messages.success(request, "Email verified. You can now log in.")
+        return redirect("patient_login")
 
-    return render(request, "accounts/verify-email-failed.html")
+    messages.error(request, "Verification link is invalid or expired.")
+    return redirect("index")
+
+
+def _send_verification_email(request, user):
+    current_site = get_current_site(request)
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+
+    verify_path = reverse("verify_email", kwargs={"uidb64": uid, "token": token})
+    verify_url = f"http://{current_site.domain}{verify_path}"
+
+    subject = "Verify your NeuroNest account"
+    message = (
+        f"Hi {user.profile.full_name},\n\n"
+        f"Please verify your email by clicking the link below:\n"
+        f"{verify_url}\n\n"
+        f"If you did not create this account, ignore this email."
+    )
+
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [user.email],
+        fail_silently=False,
+    )

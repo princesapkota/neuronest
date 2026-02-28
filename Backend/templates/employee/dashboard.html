@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Dashboard - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/employee.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark"></div><div class="brand-name">NeuroNest</div></div>
+    <nav class="topbar-actions">
+      <a class="btn outline" href="{% url 'landing' %}">Logout</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <h1 class="page-title">Employee Dashboard</h1>
+    <p class="page-subtitle">Select a model and upload patient scans.</p>
+
+    <div class="cards">
+      <a class="card" href="#">Start Diagnosis</a>
+      <a class="card" href="#">Reports</a>
+    </div>
+  </main>
+</body>
+</html>

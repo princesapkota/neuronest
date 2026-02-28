@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Results - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/patient.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark"></div><div class="brand-name">NeuroNest</div></div>
+    <nav class="topbar-actions">
+      <a class="btn outline" href="{% url 'patient_dashboard' %}">Back</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <h1 class="page-title">Results</h1>
+    <p class="page-subtitle">This will show DB results next.</p>
+    <div class="panel">No results loaded yet.</div>
+  </main>
+</body>
+</html>

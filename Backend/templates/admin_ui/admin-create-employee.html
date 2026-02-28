@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Employee - Admin - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-name">NeuroNest</div>
+    </div>
+
+    <nav class="topbar-actions">
+      <a class="btn btn-outline" href="{% url 'employees_list' %}">Back</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-head">
+      <h1 class="page-title">Create Employee</h1>
+      <p class="page-subtitle">Create an employee login and assign credentials.</p>
+    </section>
+
+    {% if messages %}
+      <section class="panel" style="margin-bottom: 16px;">
+        {% for message in messages %}
+          <div>{{ message }}</div>
+        {% endfor %}
+      </section>
+    {% endif %}
+
+    <section class="panel">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="form-grid">
+          <div class="field">
+            <label class="label">Employee Full Name</label>
+            <input class="input" type="text" name="full_name" placeholder="Full name" required />
+          </div>
+
+          <div class="field">
+            <label class="label">Personal Email (receive credentials)</label>
+            <input class="input" type="email" name="personal_email" placeholder="person@gmail.com" required />
+          </div>
+
+          <div class="field">
+            <label class="label">Assigned/Work Email (login)</label>
+            <input class="input" type="email" name="assigned_email" placeholder="employee@hospital.com" required />
+          </div>
+
+          <div class="field">
+            <label class="label">Assigned Password</label>
+            <input class="input" type="password" name="password" placeholder="Set a password" required />
+          </div>
+
+          <div class="field">
+            <label class="label">Confirm Password</label>
+            <input class="input" type="password" name="confirm_password" placeholder="Confirm password" required />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Create Employee</button>
+          <a class="btn btn-outline" href="{% url 'employees_list' %}">Cancel</a>
+        </div>
+
+        <p class="hint">
+          Credentials are emailed to the employee’s personal email.
+        </p>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

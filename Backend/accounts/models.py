@@ -24,6 +24,9 @@ class Profile(models.Model):
     role = models.CharField(max_length=20, choices=Role.choices)
     full_name = models.CharField(max_length=150)
 
+    # ✅ NEW: where we email credentials to (personal email)
+    personal_email = models.EmailField(null=True, blank=True)
+
     # Patient-only fields
     hospital_patient_id = models.CharField(
         max_length=50,
@@ -43,7 +46,7 @@ class Profile(models.Model):
         null=True,
         blank=True
     )
-  
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

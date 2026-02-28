@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patients - Admin - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-name">NeuroNest</div>
+    </div>
+
+    <nav class="topbar-actions">
+      <a class="btn btn-outline" href="admin-dashboard.html">Back</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-head">
+      <h1 class="page-title">Patients</h1>
+      <p class="page-subtitle">Search patients and manage profile records.</p>
+    </section>
+
+    <section class="panel">
+      <div class="toolbar">
+        <div class="search">
+          <input class="input" type="text" placeholder="Search by hospital patient ID or name..." />
+        </div>
+        <div class="toolbar-actions">
+          <button class="btn btn-outline" type="button">Search</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Patient Name</th>
+              <th>Hospital Patient ID</th>
+              <th>Sex</th>
+              <th>Age</th>
+              <th style="width: 220px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Example Patient</td>
+              <td>PT001</td>
+              <td>Male</td>
+              <td>22</td>
+              <td>
+                <a class="btn btn-small btn-outline" href="#">View</a>
+                <a class="btn btn-small btn-outline" href="#">Edit</a>
+                <a class="btn btn-small btn-danger" href="#">Delete</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Example Patient 2</td>
+              <td>PT002</td>
+              <td>Female</td>
+              <td>29</td>
+              <td>
+                <a class="btn btn-small btn-outline" href="#">View</a>
+                <a class="btn btn-small btn-outline" href="#">Edit</a>
+                <a class="btn btn-small btn-danger" href="#">Delete</a>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

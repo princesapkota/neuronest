@@ -19,6 +19,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    # Django admin site (superuser)
     path("admin/", admin.site.urls),
+
+    # All your app routes (landing, logins, dashboards, etc.)
     path("", include("accounts.urls")),
 ]

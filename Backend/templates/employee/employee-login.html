@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Login - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/employee.css' %}">
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div class="auth-head">
+        <h2>Employee Login</h2>
+        <p>Login to run diagnostics and forward results.</p>
+      </div>
+
+      {% if messages %}
+        <div class="alert">
+          {% for message in messages %}{{ message }}{% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="field">
+          <label>Assigned Email</label>
+          <input name="username" type="text" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input name="password" type="password" required>
+        </div>
+        <button class="btn primary" type="submit">Login</button>
+        <div class="auth-foot">
+          <a href="{% url 'landing' %}">Back to Home</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

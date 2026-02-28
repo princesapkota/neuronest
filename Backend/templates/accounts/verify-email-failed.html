@@ -1,0 +1,16 @@
+{% load static %}
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Verification Failed</title>
+<link rel="stylesheet" href="{% static 'css/patient.css' %}">
+</head>
+<body>
+  <div class="simple-page">
+    <div class="simple-card">
+      <h2>Verification failed</h2>
+      <p>The link is invalid or expired. Please sign up again.</p>
+      <a class="btn primary" href="{% url 'patient_signup' %}">Back to Sign Up</a>
+    </div>
+  </div>
+</body>
+</html>

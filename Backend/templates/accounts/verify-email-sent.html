@@ -1,0 +1,16 @@
+{% load static %}
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Verify Email</title>
+<link rel="stylesheet" href="{% static 'css/patient.css' %}">
+</head>
+<body>
+  <div class="simple-page">
+    <div class="simple-card">
+      <h2>Verify your email</h2>
+      <p>We sent a verification link to your email. Open it to activate your account.</p>
+      <a class="btn primary" href="{% url 'landing' %}">Back to Home</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Dashboard - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/patient.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-name">NeuroNest</div>
+    </div>
+    <nav class="topbar-actions">
+      <a class="btn outline" href="{% url 'patient_notifications' %}">Notifications</a>
+      <a class="btn outline" href="{% url 'patient_results' %}">Results</a>
+      <a class="btn outline" href="{% url 'landing' %}">Logout</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <h1 class="page-title">Patient Dashboard</h1>
+    <p class="page-subtitle">Check results and notifications posted by medical personnel.</p>
+
+    <div class="cards">
+      <a class="card" href="{% url 'patient_results' %}">
+        <h3>Results</h3>
+        <p>View diagnostic results and reports.</p>
+      </a>
+      <a class="card" href="{% url 'patient_notifications' %}">
+        <h3>Notifications</h3>
+        <p>See updates when new results are forwarded.</p>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
