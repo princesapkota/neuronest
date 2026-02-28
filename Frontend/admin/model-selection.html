@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model Selection - NeuroNest</title>
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+  <div class="app-header">
+    <a href="admin-dashboard.html" class="app-brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-name">NeuroNest</div>
+    </a>
+
+    <div class="app-header-right">
+      <a href="admin-dashboard.html" class="btn btn-outline">Back</a>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <div class="page-head">
+      <h2>Select a model</h2>
+      <p>Choose the diagnostic workflow for the uploaded scan.</p>
+    </div>
+
+    <div class="model-grid">
+      <a class="model-tile" href="upload.html?model=brain-tumor">
+        <div class="model-label">Model 01</div>
+        <div class="model-name">Brain Tumor Segmentation</div>
+        <div class="model-desc">MRI workflow using 2D slicing and segmentation output.</div>
+        <div class="model-meta">Input: NIfTI (.nii/.nii.gz), JPEG/PNG</div>
+      </a>
+
+      <a class="model-tile" href="upload.html?model=fracture">
+        <div class="model-label">Model 02</div>
+        <div class="model-name">Fracture Detection</div>
+        <div class="model-desc">X-ray screening for fractures with review and forwarding.</div>
+        <div class="model-meta">Input: JPEG/PNG, NIfTI (.nii/.nii.gz)</div>
+      </a>
+
+      <a class="model-tile" href="upload.html?model=pneumonia">
+        <div class="model-label">Model 03</div>
+        <div class="model-name">Pneumonia Classification</div>
+        <div class="model-desc">Chest X-ray classification with clear, viewable output.</div>
+        <div class="model-meta">Input: JPEG/PNG, NIfTI (.nii/.nii.gz)</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

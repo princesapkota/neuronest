@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Results - NeuroNest</title>
+  <link rel="stylesheet" href="../css/patient.css" />
+</head>
+<body>
+  <div class="app-header">
+    <a href="patient-dashboard.html" class="app-brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-name">NeuroNest</div>
+    </a>
+
+    <div class="app-header-right">
+      <a href="notifications.html" class="notif-link" aria-label="Notifications">
+        <span class="notif-dot" aria-hidden="true"></span>
+        <span class="badge">3</span>
+      </a>
+      <a href="patient-dashboard.html" class="btn btn-outline">Back</a>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <div class="page-head">
+      <h2>Results</h2>
+      <p>All forwarded results are stored in your history. The latest items appear first.</p>
+    </div>
+
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Model</th>
+            <th>Verdict</th>
+            <th>Forwarded By</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Replace these rows with dynamic Django data -->
+          <tr>
+            <td>Feb 17, 2026</td>
+            <td>Pneumonia Classification</td>
+            <td><span class="status status-positive">Positive</span></td>
+            <td>Employee 1021</td>
+            <td><a class="btn btn-secondary" style="padding: 8px 14px; font-size: 13px;" href="#">View</a></td>
+          </tr>
+          <tr>
+            <td>Feb 10, 2026</td>
+            <td>Fracture Detection</td>
+            <td><span class="status status-negative">Negative</span></td>
+            <td>Employee 1033</td>
+            <td><a class="btn btn-secondary" style="padding: 8px 14px; font-size: 13px;" href="#">View</a></td>
+          </tr>
+          <tr>
+            <td>Feb 02, 2026</td>
+            <td>Brain Tumor Segmentation</td>
+            <td><span class="status status-pending">Pending</span></td>
+            <td>Employee 1010</td>
+            <td><a class="btn btn-secondary" style="padding: 8px 14px; font-size: 13px;" href="#">View</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - NeuroNest</title>
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+  <div class="app-header">
+    <a href="admin-dashboard.html" class="app-brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-name">NeuroNest</div>
+    </a>
+
+    <div class="app-header-right">
+      <div class="app-role">Admin Panel</div>
+      <a href="../index.html" class="btn btn-outline">Logout</a>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <div class="page-head">
+      <h2>Dashboard</h2>
+      <p>Start a diagnosis workflow or review forwarded results.</p>
+    </div>
+
+    <div class="panel-grid">
+      <div class="panel">
+        <div class="panel-title">Diagnosis</div>
+        <div class="panel-text">
+          Choose a model, upload a scan, review the output, and forward the result to a patient ID.
+        </div>
+        <a href="model-selection.html" class="btn btn-primary">Start Diagnosis</a>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Reports</div>
+        <div class="panel-text">
+          View recently forwarded results and audit logs (optional feature).
+        </div>
+        <a href="#" class="btn btn-secondary">Open Reports</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

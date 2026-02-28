@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Dashboard - NeuroNest</title>
+  <link rel="stylesheet" href="../css/patient.css" />
+</head>
+<body>
+  <div class="app-header">
+    <a href="patient-dashboard.html" class="app-brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-name">NeuroNest</div>
+    </a>
+
+    <div class="app-header-right">
+      <a href="notifications.html" class="notif-link" aria-label="Notifications">
+        <span class="notif-dot" aria-hidden="true"></span>
+        <span class="badge">3</span>
+      </a>
+      <div class="app-role">Patient Portal</div>
+      <a href="../index.html" class="btn btn-outline">Logout</a>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <div class="page-head">
+      <h2>Dashboard</h2>
+      <p>View your latest results and notifications.</p>
+    </div>
+
+    <div class="panel-grid">
+      <div class="panel">
+        <div class="panel-title">Results</div>
+        <div class="panel-text">See your diagnostic results posted by medical personnel.</div>
+        <a href="results.html" class="btn btn-primary">View Results</a>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Notifications</div>
+        <div class="panel-text">Check alerts when a new result has been forwarded to your patient ID.</div>
+        <a href="notifications.html" class="btn btn-outline">Open Notifications</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

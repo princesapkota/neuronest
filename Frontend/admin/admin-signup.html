@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Sign Up - NeuroNest</title>
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <div class="brand-name">NeuroNest</div>
+          <div class="auth-muted">Create admin account</div>
+        </div>
+      </div>
+
+      <h2 class="auth-title">Sign up</h2>
+      <p class="auth-subtitle">Create your employee account to access diagnosis tools.</p>
+
+      <form method="post" action="">
+        <div class="form-group">
+          <label for="full_name">Full Name</label>
+          <input id="full_name" type="text" name="full_name" autocomplete="name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="employee_id">Employee ID</label>
+          <input id="employee_id" type="text" name="employee_id" required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" name="email" autocomplete="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" autocomplete="new-password" required />
+        </div>
+
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <input id="confirm_password" type="password" name="confirm_password" autocomplete="new-password" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+
+        <div class="form-footer">
+          <a href="admin-login.html">Already have an account? Login</a>
+          <br /><br />
+          <a href="../index.html">← Back to Home</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

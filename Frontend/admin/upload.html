@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload & Analyze - NeuroNest</title>
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+  <div class="app-header">
+    <a href="admin-dashboard.html" class="app-brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-name">NeuroNest</div>
+    </a>
+
+    <div class="app-header-right">
+      <a href="model-selection.html" class="btn btn-outline">Change Model</a>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <div class="page-head">
+      <h2 id="model-name">Diagnostic Analysis</h2>
+      <p>Upload a scan, review the output image, set a verdict, then forward to a patient ID.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Upload</div>
+      <div class="panel-text">Supported formats: JPG, JPEG, PNG, NIfTI (.nii, .nii.gz)</div>
+
+      <form id="upload-form" method="post" enctype="multipart/form-data" action="">
+        <label for="file-input" class="dropzone">
+          <input
+            type="file"
+            id="file-input"
+            name="medical_file"
+            accept=".jpg,.jpeg,.png,.nii,.nii.gz"
+            style="display:none;"
+            required
+          />
+          <div class="dropzone-title">Select a file</div>
+          <div class="dropzone-subtitle">Click to upload or drag and drop</div>
+        </label>
+
+        <div id="file-name" class="file-hint"></div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px;">Analyze</button>
+      </form>
+    </div>
+
+    <div id="results-section" class="panel" style="display:none; margin-top:18px;">
+      <div class="panel-title">Result</div>
+      <div class="panel-text">Review the output and finalize the verdict before forwarding.</div>
+
+      <div class="image-preview-wrap">
+        <img id="output-preview" class="image-preview" alt="Model output preview" />
+        <div id="output-placeholder" class="image-placeholder-mini" style="display:none;">
+          Output will appear here after inference.
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <form id="forward-form" method="post" action="">
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="verdict">Verdict</label>
+            <select id="verdict" name="verdict" required>
+              <option value="">Select verdict</option>
+              <option value="positive">Positive</option>
+              <option value="negative">Negative</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="patient-select">Patient ID</label>
+            <select id="patient-select" name="patient_id" required>
+              <option value="">Select Patient ID</option>
+              <!-- Replace with Django-rendered options -->
+              <option value="PT001">PT001</option>
+              <option value="PT002">PT002</option>
+              <option value="PT003">PT003</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="employee_note">Notes (optional)</label>
+          <input id="employee_note" type="text" name="employee_note" placeholder="Short note for the patient" />
+        </div>
+
+        <div class="search-row">
+          <input type="text" id="patient-search" placeholder="Search by patient ID..." />
+          <button type="button" id="patient-search-btn" class="btn btn-outline">Search</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;">Forward Result</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelType = urlParams.get('model');
+
+    const modelNames = {
+      'brain-tumor': 'Brain Tumor Segmentation',
+      'fracture': 'Fracture Detection',
+      'pneumonia': 'Pneumonia Classification'
+    };
+
+    if (modelType && modelNames[modelType]) {
+      document.getElementById('model-name').textContent = modelNames[modelType];
+    }
+
+    document.getElementById('file-input').addEventListener('change', function (e) {
+      const f = e.target.files && e.target.files[0];
+      document.getElementById('file-name').textContent = f ? ('Selected: ' + f.name) : '';
+    });
+
+    // Demo-only: show results + image preview
+    document.getElementById('upload-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const input = document.getElementById('file-input');
+      const file = input.files && input.files[0];
+
+      const img = document.getElementById('output-preview');
+      const placeholder = document.getElementById('output-placeholder');
+
+      img.src = '';
+      placeholder.style.display = 'none';
+
+      if (file && file.type && file.type.startsWith('image/')) {
+        img.src = URL.createObjectURL(file);
+        img.style.display = 'block';
+      } else {
+        img.style.display = 'none';
+        placeholder.style.display = 'flex';
+      }
+
+      document.getElementById('results-section').style.display = 'block';
+      document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('patient-search-btn').addEventListener('click', function () {
+      const q = (document.getElementById('patient-search').value || '').trim();
+      if (!q) return;
+
+      const select = document.getElementById('patient-select');
+      for (const opt of select.options) {
+        if (opt.value.toLowerCase() === q.toLowerCase()) {
+          select.value = opt.value;
+          return;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
