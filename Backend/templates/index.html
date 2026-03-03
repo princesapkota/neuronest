@@ -7,7 +7,12 @@
     <title>NeuroNest - AI-Powered Medical Imaging</title>
     <link rel="stylesheet" href="{% static 'css/landing.css' %}">
 </head>
+
 <body>
+    <div style="padding:10px; background:#111; color:#fff;">
+        Authenticated: {{ request.user.is_authenticated }} |
+        User: {{ request.user.username }}
+    </div>
     <div class="landing-header">
         <div class="logo-container">
             <div class="logo-frame"></div>

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.conf import settings
+from accounts.models import Profile, Role
 
 from accounts.models import Profile
 
@@ -55,12 +56,14 @@ def create_employee(request):
         user.is_active = True
         user.save()
 
-        # ✅ Create Profile explicitly (because role/full_name are required)
-        Profile.objects.create(
+        #Create Profile explicitly (because role/full_name are required)
+        Profile.objects.update_or_create(
             user=user,
-            role="employee",
-            full_name=full_name,
-            personal_email=personal_email,
+            defaults={
+                "role": Role.EMPLOYEE,          # or "employee"
+                "full_name": full_name,
+                "personal_email": personal_email,
+            },
         )
 
         # Email credentials to personal email

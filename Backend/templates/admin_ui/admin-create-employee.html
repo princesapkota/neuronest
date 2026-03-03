@@ -28,7 +28,9 @@
     {% if messages %}
       <section class="panel" style="margin-bottom: 16px;">
         {% for message in messages %}
-          <div>{{ message }}</div>
+          <div style="padding:10px; margin-bottom:8px; border-radius:6px; background:#111827; color:#f87171;">
+            {{ message }}
+          </div>
         {% endfor %}
       </section>
     {% endif %}

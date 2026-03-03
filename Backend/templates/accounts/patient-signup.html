@@ -2,59 +2,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeuroNest</title>
-  <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Signup - NeuroNest</title>
+
+  <!-- absolute path so it works with your current STATIC_URL -->
+  <link rel="stylesheet" href="/static/css/patient-auth.css">
 </head>
 <body>
-  <div class="landing-header">
-    <div class="logo-container">
-      <div class="logo-frame"></div>
-      <div class="logo-text">NeuroNest</div>
-    </div>
-    <div class="nav-buttons">
-      <a href="#features" class="btn btn-outline">Learn More</a>
-    </div>
-  </div>
 
-  <div class="hero-section">
-    <div class="hero-content">
-      <h1 class="hero-title">No compromises in your health</h1>
-      <p class="hero-subtitle">Clinical AI diagnostics with review workflows built for real hospital operations.</p>
+<div class="auth-wrap">
+  <div class="card">
+    <h1>Create Patient Account</h1>
+    <p>Sign up to access results and notifications. We’ll send a verification link to your email.</p>
 
-      <div class="user-selection">
-        <h3>Get Started</h3>
-        <div class="selection-buttons">
-          <a href="{% url 'patient_login' %}" class="selection-btn">Continue as Patient</a>
-          <a href="{% url 'employee_login' %}" class="selection-btn">Continue as Employee</a>
-          <a href="{% url 'admin_login' %}" class="selection-btn">Admin Login</a>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert danger">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <hr class="hr" />
+
+    <form class="form" method="post">
+      {% csrf_token %}
+
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" name="full_name" placeholder="Your full name" required>
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="field">
+        <label>Hospital Patient ID</label>
+        <input type="text" name="hospital_patient_id" placeholder="e.g., HSP-10293" required>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>Sex</label>
+          <select name="sex" required>
+            <option value="" selected disabled>Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Age</label>
+          <input type="number" name="age" min="0" max="120" placeholder="e.g., 24" required>
         </div>
       </div>
-    </div>
 
-    <div class="hero-image">
-      <div class="image-placeholder">
-        <span style="z-index: 1; position: relative;">AI-Powered Diagnostics</span>
-      </div>
-    </div>
-  </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Create a password" required>
+        </div>
 
-  <div class="features-section" id="features">
-    <div class="features-grid">
-      <div class="feature-card">
-        <h3 class="feature-title">Brain Tumor Segmentation</h3>
-        <p class="feature-description">MRI segmentation and visual outputs for review workflows.</p>
+        <div class="field">
+          <label>Confirm Password</label>
+          <input type="password" name="confirm_password" placeholder="Repeat password" required>
+        </div>
       </div>
-      <div class="feature-card">
-        <h3 class="feature-title">Fracture Detection</h3>
-        <p class="feature-description">X-ray fracture screening with confident classifications.</p>
+
+      <div class="actions">
+        <button class="btn primary" type="submit">Create account</button>
+        <a class="btn ghost" href="/patient/login/">Back to login</a>
       </div>
-      <div class="feature-card">
-        <h3 class="feature-title">Pneumonia Classification</h3>
-        <p class="feature-description">Chest X-ray screening with clear results for patients.</p>
+
+      <div class="small-note">
+        After signup, you must verify your email before you can log in.
       </div>
-    </div>
+    </form>
   </div>
+</div>
+
 </body>
 </html>

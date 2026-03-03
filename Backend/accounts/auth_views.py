@@ -5,6 +5,9 @@ from django.contrib import messages
 
 
 def _role_login(request, template_name: str, required_role: str, success_url_name: str):
+    print("ROLE_LOGIN CALLED | required:", required_role,
+      "| authenticated:", request.user.is_authenticated,
+      "| user:", request.user.username if request.user.is_authenticated else None)
     """
     Shared role-based login handler for portaladmin/employee/patient.
 
@@ -112,5 +115,8 @@ def patient_login_view(request):
 
 
 def logout_view(request):
+    print("LOGOUT HIT | before:", request.user.is_authenticated, getattr(request.user, "username", None))
     logout(request)
+    request.session.flush()   # ✅ nukes session completely
+    print("LOGOUT DONE")
     return redirect("index")

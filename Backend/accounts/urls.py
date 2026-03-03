@@ -21,6 +21,7 @@ urlpatterns = [
     # Logout
     path("logout/", auth_views.logout_view, name="logout"),
 
+
     # Dashboards
     path("portaladmin/dashboard/", portalviews.admin_dashboard, name="portaladmin_dashboard"),
     path("employee/dashboard/", portalviews.employee_dashboard, name="employee_dashboard"),

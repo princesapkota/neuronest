@@ -22,8 +22,11 @@ def employee_dashboard(request):
 
 @login_required
 def patient_dashboard(request):
-    if not _require_role(request.user, "patient"):
-        return redirect("patient_login")
+    try:
+        if request.user.profile.role != "patient":
+            return redirect("index")
+    except Exception:
+        return redirect("index")
     return render(request, "patient/patient-dashboard.html")
 
 
