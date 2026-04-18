@@ -130,7 +130,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = "princesapkota21@gmail.com"
-EMAIL_HOST_PASSWORD = "lahpiceltnqcbatr"
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
@@ -141,3 +141,10 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Path to ML models folder (../ml)
+ML_DIR = BASE_DIR.parent / "ml"
+
+# Media files (uploaded scans + ML outputs)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

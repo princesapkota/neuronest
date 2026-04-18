@@ -1,11 +1,71 @@
-.venv/
-.env
+# Python
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
 *.pyc
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Django
+*.log
+*.pot
 db.sqlite3
+Backend/db.sqlite3
+Backend/.env
+.env
+
+# Django media uploads
 media/
+Backend/media/
+
+# Django collected static (if using collectstatic)
 staticfiles/
-.idea/
+
+# ML model weights and large binaries
+ml/brain_tumor/*.pt
+ml/brain_tumor/*.pth
+ml/brain_tumor/*.h5
+ml/fracture_cls/*.pt
+ml/fracture_cls/*.pth
+ml/fracture_cls/*.h5
+ml/pneumonia/*.pt
+ml/pneumonia/*.pth
+ml/pneumonia/*.h5
+ml/__pycache__/
+
+# Dataset
+Data/
+
+# Documentation generated files (keep source, ignore builds)
+documentation/*.pdf
+documentation/__pycache__/
+
+# VS Code
 .vscode/
-notes.txt
-dataset
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Migrations cache
+**/migrations/__pycache__/
+**/__pycache__/
+
+# Coverage / test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

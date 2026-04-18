@@ -24,4 +24,5 @@ urlpatterns = [
 
     # All your app routes (landing, logins, dashboards, etc.)
     path("", include("accounts.urls")),
+    path("diagnostics/", include("diagnostics.urls")),
 ]
