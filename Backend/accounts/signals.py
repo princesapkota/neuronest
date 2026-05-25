@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .models import Profile, Role
 
 
+# this runs automatically every time a new User is made, so a matching Profile always gets created with them
 @receiver(post_save, sender=User)
 def ensure_profile_exists(sender, instance, created, **kwargs):
     """
@@ -15,16 +16,6 @@ def ensure_profile_exists(sender, instance, created, **kwargs):
             user=instance,
             defaults={
                 "role": Role.PATIENT,  # fallback default
-                "full_name": instance.get_full_name() or instance.username,
-            }
-        )
-@receiver(post_save, sender=User)
-def create_profile_for_new_user(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.get_or_create(
-            user=instance,
-            defaults={
-                "role": Role.PATIENT,  # keep patient if you want default
                 "full_name": instance.get_full_name() or instance.username,
             }
         )

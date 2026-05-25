@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from accounts.models import Profile, Sex
 
 
+# this is the sign up form for patients and it holds all the rules for what counts as valid input
 class PatientSignupForm(forms.Form):
     full_name = forms.CharField(max_length=150)
     email = forms.EmailField()
@@ -16,16 +17,18 @@ class PatientSignupForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data["email"].lower()
-        if User.objects.filter(email=email).exists():
-            raise ValidationError("Email is already registered.")
+        if User.objects.filter(email=email, profile__role="patient").exists():
+            raise ValidationError("A patient account with this email already exists.")
         return email
 
+    # this makes sure the same hospital patient id is not used twice
     def clean_hospital_patient_id(self):
         pid = self.cleaned_data["hospital_patient_id"].strip()
         if Profile.objects.filter(hospital_patient_id=pid).exists():
             raise ValidationError("This patient ID is already registered.")
         return pid
 
+    # this checks the two password boxes actually match each other
     def clean(self):
         cleaned = super().clean()
         pw = cleaned.get("password")

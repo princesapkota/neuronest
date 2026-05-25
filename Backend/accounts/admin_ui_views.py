@@ -1,21 +1,32 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from django.shortcuts import render, redirect
-from django.conf import settings
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
+
 from accounts.models import Profile, Role
+# reuse the shared role checker instead of writing the admin check logic again
+from accounts.views import _require_role
 
-from accounts.models import Profile
 
-
+# this is a quick yes/no check that the person using the page is actually a logged in admin
 def _is_portal_admin(request) -> bool:
-    try:
-        return request.user.is_authenticated and request.user.profile.role == "admin"
-    except Exception:
-        return False
+    return request.user.is_authenticated and _require_role(request.user, Role.ADMIN)
 
 
+# this loads the admin home dashboard (only admins are let in)
+@login_required
+def admin_dashboard(request):
+    if not _is_portal_admin(request):
+        return redirect("index")
+
+    return render(request, "admin_ui/admin-dashboard.html")
+
+
+# this is the form where an admin makes a new employee account and emails them the login details
 @login_required
 def create_employee(request):
     if not _is_portal_admin(request):
@@ -36,7 +47,6 @@ def create_employee(request):
             messages.error(request, "Passwords do not match.")
             return render(request, "admin_ui/admin-create-employee.html")
 
-        # ✅ Use assigned_email as username (easy login)
         username = assigned_email
 
         if User.objects.filter(username__iexact=username).exists():
@@ -47,7 +57,6 @@ def create_employee(request):
             messages.error(request, "Assigned email is already in use.")
             return render(request, "admin_ui/admin-create-employee.html")
 
-        # Create Django User (assigned email used for login)
         user = User.objects.create_user(
             username=username,
             email=assigned_email,
@@ -56,17 +65,15 @@ def create_employee(request):
         user.is_active = True
         user.save()
 
-        #Create Profile explicitly (because role/full_name are required)
         Profile.objects.update_or_create(
             user=user,
             defaults={
-                "role": Role.EMPLOYEE,          # or "employee"
+                "role": Role.EMPLOYEE,
                 "full_name": full_name,
                 "personal_email": personal_email,
             },
         )
 
-        # Email credentials to personal email
         login_url = "http://127.0.0.1:8000/employee/login/"
         subject = "NeuroNest Employee Account Credentials"
         body = (
@@ -79,7 +86,13 @@ def create_employee(request):
         )
 
         try:
-            send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [personal_email], fail_silently=False)
+            send_mail(
+                subject,
+                body,
+                settings.DEFAULT_FROM_EMAIL,
+                [personal_email],
+                fail_silently=False,
+            )
         except Exception as e:
             messages.warning(request, f"Employee created, but email failed to send: {e}")
             return redirect("employees_list")
@@ -88,10 +101,61 @@ def create_employee(request):
         return redirect("employees_list")
 
     return render(request, "admin_ui/admin-create-employee.html")
+
+
+# this shows the admin a list of every employee account that exists
 @login_required
 def employees_list(request):
     if not _is_portal_admin(request):
         return redirect("index")
 
-    employees = Profile.objects.select_related("user").filter(role="employee").order_by("-created_at")
-    return render(request, "admin_ui/admin-employees.html", {"employees": employees})
+    query = request.GET.get("q", "").strip()
+    employees = Profile.objects.select_related("user").filter(role=Role.EMPLOYEE)
+    if query:
+        employees = employees.filter(
+            Q(full_name__icontains=query) | Q(user__email__icontains=query)
+        )
+    employees = employees.order_by("-created_at")
+
+    return render(request, "admin_ui/admin-employees.html", {"employees": employees, "query": query})
+
+
+@login_required
+@require_POST
+def delete_employee(request, profile_id):
+    if not _is_portal_admin(request):
+        return redirect("index")
+
+    profile = get_object_or_404(Profile, id=profile_id, role=Role.EMPLOYEE)
+    profile.user.delete()
+    messages.success(request, "Employee deleted successfully.")
+    return redirect("employees_list")
+
+
+# this shows the admin a list of every patient account that exists
+@login_required
+def patients_list(request):
+    if not _is_portal_admin(request):
+        return redirect("index")
+
+    query = request.GET.get("q", "").strip()
+    patients = Profile.objects.select_related("user").filter(role=Role.PATIENT)
+    if query:
+        patients = patients.filter(
+            Q(full_name__icontains=query) | Q(hospital_patient_id__icontains=query)
+        )
+    patients = patients.order_by("-created_at")
+
+    return render(request, "admin_ui/admin-patients.html", {"patients": patients, "query": query})
+
+
+@login_required
+@require_POST
+def delete_patient(request, profile_id):
+    if not _is_portal_admin(request):
+        return redirect("index")
+
+    profile = get_object_or_404(Profile, id=profile_id, role=Role.PATIENT)
+    profile.user.delete()
+    messages.success(request, "Patient deleted successfully.")
+    return redirect("patients_list")
