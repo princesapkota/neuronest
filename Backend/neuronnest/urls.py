@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# this is the main router, it hands off the different parts of the site to each app's own url file
 urlpatterns = [
     # Django admin site (superuser)
     path("admin/", admin.site.urls),
