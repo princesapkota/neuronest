@@ -25,20 +25,21 @@ Backend/media/
 # Django collected static (if using collectstatic)
 staticfiles/
 
-# ML model weights and large binaries
-ml/brain_tumor/*.pt
-ml/brain_tumor/*.pth
-ml/brain_tumor/*.h5
-ml/fracture_cls/*.pt
-ml/fracture_cls/*.pth
-ml/fracture_cls/*.h5
-ml/pneumonia/*.pt
-ml/pneumonia/*.pth
-ml/pneumonia/*.h5
+# ML model weights and large binaries (ignore trained weights anywhere in the repo)
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.onnx
+*.safetensors
 ml/__pycache__/
 
 # Dataset
 Data/
+
+# Processed ML data (large, regenerable from the raw datasets)
+*.npy
+ml/**/processed/
 
 # Documentation generated files (keep source, ignore builds)
 documentation/*.pdf
@@ -52,9 +53,8 @@ documentation/__pycache__/
 Thumbs.db
 desktop.ini
 
-# Jupyter
+# Jupyter (track .ipynb notebooks; ignore only the autosave checkpoint cache)
 .ipynb_checkpoints/
-*.ipynb
 
 # Migrations cache
 **/migrations/__pycache__/
