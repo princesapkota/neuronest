@@ -2,9 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Patient Dashboard - NeuroNest</title>
   <link rel="stylesheet" href="{% static 'css/patient.css' %}">
+  <!-- this page's styles start around line 410 in patient.css -->
 </head>
 <body>
   <header class="topbar">
@@ -13,26 +15,95 @@
       <div class="brand-name">NeuroNest</div>
     </div>
     <nav class="topbar-actions">
-      <a class="btn outline" href="{% url 'patient_notifications' %}">Notifications</a>
-      <a class="btn outline" href="{% url 'patient_results' %}">Results</a>
-      <a class="btn outline" href="{% url 'logout' %}">Logout</a>
+      <div class="notification-menu">
+        <button class="btn icon-only notification-trigger" type="button" id="notificationTrigger"
+          title="Notifications" aria-label="Open notifications"
+          aria-expanded="false" aria-controls="notificationDropdown">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+          </svg>
+          {% if unread_notifications_count > 0 %}
+            <span class="notification-badge">{{ unread_notifications_count }}</span>
+          {% endif %}
+        </button>
+
+        <div class="notification-dropdown" id="notificationDropdown">
+          <div class="notification-dropdown-header">
+            <h3>Notifications</h3>
+          </div>
+          <div class="notification-dropdown-list">
+            {% if recent_notifications %}
+              {% for note in recent_notifications %}
+                <a href="{% url 'patient_result_detail' note.result.id %}" class="notification-item">
+                  <div class="notification-item-content">
+                    <div class="notification-item-title">{{ note.title }}</div>
+                    <div class="notification-item-message">{{ note.message }}</div>
+                    <div class="notification-item-meta">{{ note.result.get_model_type_display }} • {{ note.created_at }}</div>
+                  </div>
+                  {% if not note.is_read %}<span class="notification-item-dot"></span>{% endif %}
+                </a>
+              {% endfor %}
+            {% else %}
+              <div class="notification-empty">No notifications yet.</div>
+            {% endif %}
+          </div>
+          <div class="notification-dropdown-footer">
+            <a class="see-more-link" href="{% url 'patient_notifications' %}">See more</a>
+          </div>
+        </div>
+      </div>
+
+      <a class="btn" href="{% url 'patient_results' %}">Results</a>
+      <a class="btn logout-btn" href="{% url 'logout' %}">Logout</a>
     </nav>
   </header>
 
   <main class="page">
-    <h1 class="page-title">Patient Dashboard</h1>
-    <p class="page-subtitle">Check results and notifications posted by medical personnel.</p>
-
-    <div class="cards">
-      <a class="card" href="{% url 'patient_results' %}">
-        <h3>Results</h3>
-        <p>View diagnostic results and reports.</p>
+    <div class="dash-cards">
+      <a class="dash-card" href="{% url 'patient_results' %}">
+        <div class="dash-card-icon blue">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="dash-card-body">
+          <h3 class="dash-card-title">Results</h3>
+          <p class="dash-card-text">View diagnostic results and reports forwarded by medical staff.</p>
+        </div>
+        <div class="dash-card-arrow">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
       </a>
-      <a class="card" href="{% url 'patient_notifications' %}">
-        <h3>Notifications</h3>
-        <p>See updates when new results are forwarded.</p>
+
+      <a class="dash-card" href="{% url 'patient_notifications' %}">
+        <div class="dash-card-icon red">
+          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="dash-card-body">
+          <h3 class="dash-card-title">Notifications</h3>
+          <p class="dash-card-text">See updates when new results are forwarded to you.</p>
+        </div>
+        <div class="dash-card-arrow">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
       </a>
     </div>
   </main>
+
+  <script>
+    const notificationTrigger = document.getElementById("notificationTrigger");
+    const notificationDropdown = document.getElementById("notificationDropdown");
+    if (notificationTrigger && notificationDropdown) {
+      notificationTrigger.addEventListener("click", function(e) {
+        e.stopPropagation();
+        notificationDropdown.classList.toggle("show");
+        notificationTrigger.setAttribute("aria-expanded", notificationDropdown.classList.contains("show"));
+      });
+      document.addEventListener("click", function(e) {
+        if (!notificationDropdown.contains(e.target) && !notificationTrigger.contains(e.target)) {
+          notificationDropdown.classList.remove("show");
+          notificationTrigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
 </body>
 </html>

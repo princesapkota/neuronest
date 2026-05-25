@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard - NeuroNest</title>
   <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+  <!-- this page's styles start around line 174 in admin.css -->
 </head>
 <body>
   <header class="topbar">
@@ -13,38 +14,60 @@
       <div class="brand-mark"></div>
       <div class="brand-name">NeuroNest</div>
     </div>
-
     <nav class="topbar-actions">
       <span class="topbar-role">System Admin</span>
-      <a class="btn btn-outline" href="{% url 'logout' %}">Logout</a>
+      <a class="btn btn-outline logout-btn" href="{% url 'logout' %}">Logout</a>
     </nav>
   </header>
 
   <main class="page">
-    <section class="page-head">
-      <h1 class="page-title">Admin Dashboard</h1>
-      <p class="page-subtitle">Manage employees, patients, and system access.</p>
-    </section>
-
-    <section class="cards">
-      <a class="card" href="{% url 'employees_list' %}">
-        <h3 class="card-title">Employee Management</h3>
-        <p class="card-text">Create employee accounts, reset access, and maintain staff records.</p>
-        <span class="card-link">Open</span>
-      </a>
-
-      <a class="card" href="admin-patients.html">
-        <h3 class="card-title">Patient Management</h3>
-        <p class="card-text">View and update patient profiles and hospital patient IDs.</p>
-        <span class="card-link">Open</span>
-      </a>
-
-      <div class="card card-muted">
-        <h3 class="card-title">System Overview</h3>
-        <p class="card-text">Basic metrics and logs can be added here later for audit tracking.</p>
-        <span class="card-link">Coming soon</span>
+    <div class="welcome-banner">
+      <div class="welcome-glow"></div>
+      <div class="welcome-text">
+        <p class="welcome-label">Admin Panel</p>
+        <h1 class="welcome-name">{{ request.user.profile.full_name|default:request.user.username }}</h1>
+        <p class="welcome-sub">Manage employees, patients, and system access.</p>
       </div>
-    </section>
+    </div>
+
+    <div class="dash-cards">
+      <a class="dash-card" href="{% url 'employees_list' %}">
+        <div class="dash-card-icon blue">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="dash-card-body">
+          <h3 class="dash-card-title">Employee Management</h3>
+          <p class="dash-card-text">Create employee accounts, reset access, and maintain staff records.</p>
+        </div>
+        <div class="dash-card-arrow">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </a>
+
+      <a class="dash-card" href="{% url 'patients_list' %}">
+        <div class="dash-card-icon green">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="dash-card-body">
+          <h3 class="dash-card-title">Patient Management</h3>
+          <p class="dash-card-text">View and update patient profiles and hospital patient IDs.</p>
+        </div>
+        <div class="dash-card-arrow">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </a>
+
+      <div class="dash-card muted">
+        <div class="dash-card-icon grey">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="dash-card-body">
+          <h3 class="dash-card-title">System Overview</h3>
+          <p class="dash-card-text">Metrics and audit logs — coming soon.</p>
+        </div>
+        <span class="dash-card-soon">Soon</span>
+      </div>
+    </div>
   </main>
 </body>
 </html>

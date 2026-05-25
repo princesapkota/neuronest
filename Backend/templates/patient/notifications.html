@@ -1,48 +1,80 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Notifications - NeuroNest</title>
-  <link rel="stylesheet" href="../css/patient.css" />
+  <link rel="stylesheet" href="{% static 'css/patient.css' %}">
+  <!-- this page's styles start around line 704 in patient.css -->
 </head>
 <body>
-  <div class="app-header">
-    <a href="patient-dashboard.html" class="app-brand">
-      <div class="brand-mark" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <a class="icon-btn" href="{% url 'patient_dashboard' %}" title="Back to Dashboard">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg>
+      </a>
+      <div class="brand-mark"></div>
       <div class="brand-name">NeuroNest</div>
-    </a>
-
-    <div class="app-header-right">
-      <a href="patient-dashboard.html" class="btn btn-outline">Back</a>
     </div>
-  </div>
+  </header>
 
-  <div class="app-container">
-    <div class="page-head">
-      <h2>Notifications</h2>
-      <p>Updates are shown here when results are forwarded to your patient ID.</p>
+  <main class="page">
+    <h1 class="page-title">Notifications</h1>
+    <p class="page-subtitle">Updates appear here when a report is forwarded to you.</p>
+
+    <div class="notif-feed">
+      {% if notifications %}
+        {% for note in notifications %}
+          {% if note.result %}
+            <a class="notif-row" href="{% url 'patient_result_detail' note.result.id %}">
+          {% else %}
+            <div class="notif-row no-link">
+          {% endif %}
+
+            <div class="notif-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </div>
+
+            <div class="notif-body">
+              <div class="notif-title">{{ note.title }}</div>
+              <div class="notif-message">{{ note.message }}</div>
+              <div class="notif-meta">
+                <span class="notif-time">{{ note.created_at }}</span>
+                {% if note.result %}
+                  <span class="notif-tag">{{ note.result.get_model_type_display }}</span>
+                {% endif %}
+              </div>
+            </div>
+
+            {% if note.result %}
+              <div class="notif-arrow">
+                <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg>
+              </div>
+            {% endif %}
+
+          {% if note.result %}
+            </a>
+          {% else %}
+            </div>
+          {% endif %}
+        {% endfor %}
+
+      {% else %}
+        <div class="empty-box">
+          <svg viewBox="0 0 24 24">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <p>No notifications yet.</p>
+        </div>
+      {% endif %}
     </div>
+  </main>
 
-    <div class="notice-list">
-      <div class="notice unread">
-        <div class="notice-title">New result available</div>
-        <div class="notice-text">A result was forwarded to your patient ID. Open Results to view details.</div>
-        <div class="notice-time">2 hours ago</div>
-      </div>
-
-      <div class="notice unread">
-        <div class="notice-title">Result forwarded</div>
-        <div class="notice-text">A diagnostic output was added to your account.</div>
-        <div class="notice-time">1 day ago</div>
-      </div>
-
-      <div class="notice">
-        <div class="notice-title">Result updated</div>
-        <div class="notice-text">A newer result is available. Your previous entry remains in history.</div>
-        <div class="notice-time">3 days ago</div>
-      </div>
-    </div>
-  </div>
 </body>
 </html>

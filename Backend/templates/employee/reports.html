@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Reports - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/employee.css' %}">
+  <!-- this page uses shared styles from line 1 in employee.css -->
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a class="icon-btn" href="{% url 'employee_dashboard' %}" aria-label="Back" title="Back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+    </a>
+    <div class="brand-mark"></div>
+    <div class="brand-name">NeuroNest</div>
+  </div>
+</header>
+
+<main class="page">
+  <h1 class="page-title">Reports</h1>
+  <p class="page-subtitle">All diagnostic results you created.</p>
+
+  <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
+    {% if results %}
+      {% for r in results %}
+        <div style="display:flex; align-items:center; gap:14px; padding:12px 16px; background:var(--card); border:1px solid var(--border); border-radius:12px;">
+
+          {% if r.output_png %}
+            <img
+              src="{% url 'diagnostics:diagnostic_output_png' r.id %}"
+              alt="Result thumbnail"
+              style="width:90px; height:56px; object-fit:cover; border-radius:8px; border:1px solid var(--border); flex-shrink:0;"
+            />
+          {% else %}
+            <div style="width:90px; height:56px; border-radius:8px; border:1px solid var(--border); background:#12131a; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--muted);">No image</div>
+          {% endif %}
+
+          <div style="flex:1; min-width:0;">
+            <div style="font-weight:700; font-size:14px; color:var(--primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+              {{ r.get_model_type_display }} — {{ r.patient.full_name }}
+            </div>
+            <div style="color:var(--muted); font-size:12px; margin-top:3px;">
+              {{ r.created_at }}
+            </div>
+          </div>
+
+          <a href="{% url 'diagnostics:employee_result_detail' r.id %}" class="btn outline" style="font-size:12px; padding:6px 12px; flex-shrink:0;">View</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p style="color:var(--muted);">No reports yet.</p>
+    {% endif %}
+  </div>
+</main>
+
+</body>
+</html>

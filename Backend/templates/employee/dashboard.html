@@ -4,23 +4,56 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Employee Dashboard - NeuroNest</title>
-  <link rel="stylesheet" href="{% static 'css/employee.css' %}">
+  <link rel="stylesheet" href="{% static 'css/employee-dashboard.css' %}">
+  <!-- this page's styles start at line 1 in employee-dashboard.css -->
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><div class="brand-mark"></div><div class="brand-name">NeuroNest</div></div>
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-name">NeuroNest</div>
+    </div>
     <nav class="topbar-actions">
-      <a class="btn outline" href="{% url 'logout' %}">Logout</a>
+      <a class="btn logout-btn" href="{% url 'logout' %}">Logout</a>
     </nav>
   </header>
 
   <main class="page">
-    <h1 class="page-title">Employee Dashboard</h1>
-    <p class="page-subtitle">Select a model and upload patient scans.</p>
+    <div class="welcome-banner">
+      <div class="welcome-glow"></div>
+      <div class="welcome-text">
+        <p class="welcome-label">Welcome back</p>
+        <h1 class="welcome-name">{{ request.user.profile.full_name|default:request.user.username }}</h1>
+        <p class="welcome-sub">Upload patient scans and manage diagnostic workflows.</p>
+      </div>
+    </div>
 
-    <div class="cards">
-      <a class="card" href="#">Start Diagnosis</a>
-      <a class="card" href="#">Reports</a>
+    <div class="dash-cards">
+      <a class="dash-card" href="{% url 'diagnostics:employee_upload' %}">
+        <div class="dash-card-icon blue">
+          <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+        </div>
+        <div class="dash-card-body">
+          <h3 class="dash-card-title">Start Diagnosis</h3>
+          <p class="dash-card-text">Select a patient, choose a model, and upload a scan for analysis.</p>
+        </div>
+        <div class="dash-card-arrow">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </a>
+
+      <a class="dash-card" href="{% url 'diagnostics:employee_reports' %}">
+        <div class="dash-card-icon red">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="dash-card-body">
+          <h3 class="dash-card-title">Reports</h3>
+          <p class="dash-card-text">View and manage all diagnostic records you have created.</p>
+        </div>
+        <div class="dash-card-arrow">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </a>
     </div>
   </main>
 </body>

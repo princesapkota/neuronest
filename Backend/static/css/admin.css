@@ -1,58 +1,35 @@
-/* =========================================================
-   admin.css - NeuroNest (Custom Admin UI)
-   Notes:
-   - This file is ONLY for custom admin pages (admin_ui/*).
-   - Employee UI uses employee.css, Patient UI uses patient.css.
-   ========================================================= */
+/* -- Shared styles (used by all admin pages)*/
 
-/* =========================
-   Base + Variables
-   ========================= */
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #f8f9fa;
-
-  --text: #1a1a1a;
-  --muted: #6b7280;
-
-  --primary: #1e5aa8;      /* landing blue */
-  --primary-2: #174a8a;
-  --accent: #ef5350;       /* landing red */
-
-  --border: rgba(0, 0, 0, 0.08);
-  --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-
+  --bg: #0f1013;
+  --card: #17181d;
+  --border: rgba(255,255,255,.08);
+  --text: #ffffff;
+  --muted: #b8bcc6;
+  --primary: #2f6feb;
+  --accent: #ef5350;
+  --shadow: 0 18px 70px rgba(0,0,0,.55);
   --radius: 16px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-    Cantarell, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
   background: var(--bg);
   color: var(--text);
+  min-height: 100vh;
 }
 
 a { color: inherit; text-decoration: none; }
 
-.page {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 28px 20px 60px;
-}
-
-/* =========================
-   Topbar (Shared)
-   ========================= */
 .topbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--surface);
+  background: #12131a;
   border-bottom: 1px solid var(--border);
-  padding: 18px 28px;
+  padding: 16px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -65,8 +42,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .brand-mark {
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: 34px;
   border: 3px solid var(--accent);
   border-right: none;
   border-bottom: none;
@@ -86,9 +63,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .brand-name {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 800;
-  letter-spacing: -0.3px;
   color: var(--text);
 }
 
@@ -104,83 +80,267 @@ a { color: inherit; text-decoration: none; }
   font-size: 14px;
 }
 
-/* =========================
-   Buttons (Shared)
-   ========================= */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: 12px;
-  padding: 10px 16px;
-  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
   font-size: 14px;
-  border: 2px solid transparent;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+  transition: background .2s, transform .2s;
 }
+
+.btn:hover { background: rgba(255,255,255,.08); }
 
 .btn-primary {
   background: var(--primary);
+  border-color: var(--primary);
   color: #fff;
-  box-shadow: 0 10px 24px rgba(30, 90, 168, 0.18);
 }
-
-.btn-primary:hover { background: var(--primary-2); transform: translateY(-1px); }
+.btn-primary:hover { background: #2260d4; border-color: #2260d4; }
 
 .btn-outline {
-  background: #fff;
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color: var(--border);
+  color: var(--text);
 }
-
-.btn-outline:hover { background: var(--primary); color: #fff; transform: translateY(-1px); }
+.btn-outline:hover { background: rgba(255,255,255,.08); }
 
 .btn-danger {
-  background: #fff;
   border-color: var(--accent);
   color: var(--accent);
 }
-
-.btn-danger:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
+.btn-danger:hover { background: var(--accent); color: #fff; }
 
 .btn-small {
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 13px;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 8px;
 }
 
-/* =========================
-   Page Header (Shared)
-   ========================= */
-.page-head {
-  padding: 18px 0 22px;
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
 }
+
+.page-head { padding: 18px 0 22px; }
 
 .page-title {
-  font-size: 30px;
-  font-weight: 900;
-  color: var(--primary);
-  letter-spacing: -0.6px;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
 }
 
 .page-subtitle {
   margin-top: 8px;
   color: var(--muted);
-  line-height: 1.5;
+  font-size: 14px;
 }
 
-/* =========================
-   Panels + Cards (Shared)
-   ========================= */
 .panel {
-  background: var(--surface);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 22px;
+  margin-top: 24px;
 }
+
+.alert {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255,80,80,.12);
+  border: 1px solid rgba(255,80,80,.25);
+  color: #ffd4d4;
+  font-size: 13px;
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 980px) {
+  .topbar { padding: 14px 18px; }
+}
+
+/* end Shared styles */
+
+
+/* -- admin-dashboard.html ------------------------------- */
+
+.logout-btn{ color:#ef5350; border-color:rgba(239,83,80,.25); }
+.logout-btn:hover{ background:rgba(239,83,80,.1); color:#ef5350; }
+
+.welcome-banner{
+  position:relative;
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:28px 28px 24px;
+  margin-bottom:24px;
+}
+.welcome-glow{
+  position:absolute;
+  top:-80px; left:-80px;
+  width:320px; height:320px;
+  background:radial-gradient(circle,rgba(239,83,80,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.welcome-label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:6px;
+}
+.welcome-name{
+  font-size:26px;
+  font-weight:800;
+  color:var(--text);
+  letter-spacing:-.3px;
+  margin-bottom:6px;
+}
+.welcome-sub{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.dash-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+}
+
+.dash-card{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  text-decoration:none;
+  color:inherit;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+  box-shadow:var(--shadow);
+}
+.dash-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(47,111,235,.3);
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+}
+.dash-card.muted{ opacity:.5; pointer-events:none; }
+
+.dash-card-icon{
+  width:48px; height:48px;
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.dash-card-icon svg{
+  width:22px; height:22px;
+  fill:none; stroke-width:2;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.dash-card-icon.blue{ background:rgba(47,111,235,.12); border:1px solid rgba(47,111,235,.2); }
+.dash-card-icon.blue svg{ stroke:#2f6feb; }
+.dash-card-icon.green{ background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.2); }
+.dash-card-icon.green svg{ stroke:#4ade80; }
+.dash-card-icon.grey{ background:rgba(255,255,255,.05); border:1px solid var(--border); }
+.dash-card-icon.grey svg{ stroke:var(--muted); }
+
+.dash-card-body{ flex:1; min-width:0; }
+.dash-card-title{ font-size:16px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.dash-card-text{ font-size:13px; color:var(--muted); line-height:1.5; }
+
+.dash-card-arrow{ flex-shrink:0; opacity:.35; }
+.dash-card-arrow svg{
+  width:18px; height:18px;
+  fill:none; stroke:white; stroke-width:2;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.dash-card-soon{
+  font-size:11px; font-weight:700;
+  color:var(--muted);
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border);
+  border-radius:99px;
+  padding:3px 10px;
+  flex-shrink:0;
+}
+
+/* end admin-dashboard.html */
+
+
+/* -- admin-create-employee.html ------------------------------- */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  transition: border .2s, box-shadow .2s;
+}
+
+.input::placeholder { color: rgba(184,188,198,.55); }
+
+.input:focus {
+  border-color: rgba(47,111,235,.6);
+  box-shadow: 0 0 0 4px rgba(47,111,235,.12);
+}
+
+.form-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.hint {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 980px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+/* end admin-create-employee.html */
+
+
+/* -- admin-employees.html / admin-patients.html ------------------------------- */
 
 .cards {
   display: grid;
@@ -190,48 +350,41 @@ a { color: inherit; text-decoration: none; }
 }
 
 .card {
-  background: var(--surface);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 22px;
   box-shadow: var(--shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform .2s;
+  text-decoration: none;
+  color: var(--text);
 }
 
-.card:hover { transform: translateY(-4px); box-shadow: 0 18px 54px rgba(0,0,0,0.10); }
+.card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,.14); }
 
 .card-title {
   font-size: 18px;
-  font-weight: 900;
-  color: var(--primary);
+  font-weight: 700;
+  color: var(--text);
 }
 
 .card-text {
   margin-top: 10px;
   color: var(--muted);
   line-height: 1.6;
+  font-size: 14px;
 }
 
 .card-link {
   display: inline-block;
   margin-top: 16px;
   color: var(--primary);
-  font-weight: 800;
+  font-weight: 700;
+  font-size: 13px;
 }
 
-.card-muted { opacity: 0.8; }
+.card-muted { opacity: 0.5; }
 
-/* =========================================================
-   Admin Dashboard Page Styles (admin-dashboard.html)
-   Starts here
-   ========================================================= */
-/* (Dashboard uses shared .cards and .card styles.) */
-
-
-/* =========================================================
-   Employees List Page Styles (admin-employees.html)
-   Starts here
-   ========================================================= */
 .toolbar {
   display: flex;
   align-items: center;
@@ -241,21 +394,6 @@ a { color: inherit; text-decoration: none; }
 }
 
 .search { flex: 1; }
-
-.input {
-  width: 100%;
-  border: 2px solid rgba(30, 90, 168, 0.12);
-  border-radius: 12px;
-  padding: 12px 14px;
-  font-size: 14px;
-  outline: none;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
-}
-
-.input:focus {
-  border-color: rgba(30, 90, 168, 0.55);
-  box-shadow: 0 0 0 4px rgba(30, 90, 168, 0.10);
-}
 
 .table-wrap {
   overflow-x: auto;
@@ -274,8 +412,8 @@ a { color: inherit; text-decoration: none; }
   font-size: 12px;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--primary);
-  background: var(--surface-2);
+  color: var(--muted);
+  background: #12131a;
   padding: 14px;
   border-bottom: 1px solid var(--border);
 }
@@ -283,76 +421,39 @@ a { color: inherit; text-decoration: none; }
 .table td {
   padding: 14px;
   border-bottom: 1px solid var(--border);
-  color: #111827;
+  color: var(--text);
+  font-size: 14px;
 }
 
-.table tr:hover td {
-  background: rgba(30, 90, 168, 0.04);
-}
+.table tr:last-child td { border-bottom: none; }
+
+.table tr:hover td { background: rgba(255,255,255,.03); }
 
 .badge {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 6px 10px;
+  padding: 4px 10px;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .badge-good {
-  background: rgba(34, 197, 94, 0.12);
-  color: #166534;
+  background: rgba(34,197,94,.12);
+  color: #4ade80;
 }
 
 .badge-muted {
-  background: rgba(107, 114, 128, 0.12);
-  color: #374151;
-}
-
-/* =========================================================
-   Patients List Page Styles (admin-patients.html)
-   Starts here
-   ========================================================= */
-/* (Patients page uses the same table + toolbar styles.) */
-
-
-/* =========================================================
-   Create Employee Page Styles (admin-create-employee.html)
-   Starts here
-   ========================================================= */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.field { display: flex; flex-direction: column; gap: 8px; }
-
-.label {
-  font-size: 13px;
-  font-weight: 800;
-  color: #111827;
-}
-
-.form-actions {
-  margin-top: 18px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.hint {
-  margin-top: 14px;
+  background: rgba(184,188,198,.1);
   color: var(--muted);
-  font-size: 13px;
-  line-height: 1.5;
 }
 
-/* =========================
-   Responsive
-   ========================= */
 @media (max-width: 980px) {
-  .cards { grid-template-columns: 1fr; }
-  .form-grid { grid-template-columns: 1fr; }
-  .topbar { padding: 14px 18px; }
+  .cards { grid-template-columns: 1fr 1fr; }
 }
+
+@media (max-width: 640px) {
+  .cards { grid-template-columns: 1fr; }
+}
+
+/* end admin-employees.html / admin-patients.html */

@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Result - NeuroNest</title>
+<link rel="stylesheet" href="{% static 'css/result-review.css' %}">
+<!-- this page's styles start around line 222 in result-review.css -->
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a class="icon-btn" href="{% url 'employee_dashboard' %}">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </a>
+    <div class="brand-mark"></div>
+    <div class="brand-name">NeuroNest</div>
+  </div>
+</header>
+
+<main class="page">
+
+  <div class="page-header">
+    <h1 class="page-title">Review Result</h1>
+    <p class="page-subtitle">Review the AI-generated report and choose a final action.</p>
+  </div>
+
+  <div class="review-layout">
+
+    <div class="review-image-panel">
+      <p class="panel-label">Diagnostic Output</p>
+      <div class="image-frame">
+        <img
+          src="{% url 'diagnostics:diagnostic_output_png' result.id %}"
+          alt="Diagnostic Report"
+          class="result-img"
+        >
+      </div>
+    </div>
+
+    <div class="review-right">
+
+      <div class="detail-panel">
+        <p class="panel-label">Report Details</p>
+        <div class="detail-grid">
+
+          <div class="detail-row">
+            <span class="detail-label">
+              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Patient
+            </span>
+            <span class="detail-value">{{ result.patient.full_name }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">
+              <svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="10" ry="7"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+              Model
+            </span>
+            <span class="detail-value">{{ result.get_model_type_display }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Created
+            </span>
+            <span class="detail-value">{{ result.created_at }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">
+              <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Status
+            </span>
+            <span class="detail-value">
+              <span class="status-badge status-{{ result.status }}">{{ result.get_status_display }}</span>
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="action-panel">
+        <p class="panel-label">Final Action</p>
+        <p class="action-hint">This decision will be recorded and cannot be undone.</p>
+
+        <div class="action-buttons">
+          <form method="post" action="{% url 'diagnostics:reject_report' result.id %}">
+            {% csrf_token %}
+            <button type="submit" class="action-btn reject-btn">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              Reject Report
+            </button>
+          </form>
+
+          <form method="post" action="{% url 'diagnostics:forward_report_to_patient' result.id %}">
+            {% csrf_token %}
+            <button type="submit" class="action-btn forward-btn">
+              <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Forward to Patient
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

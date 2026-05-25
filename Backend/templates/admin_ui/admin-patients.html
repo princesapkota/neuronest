@@ -15,7 +15,7 @@
     </div>
 
     <nav class="topbar-actions">
-      <a class="btn btn-outline" href="admin-dashboard.html">Back</a>
+      <a class="btn btn-outline" href="{% url 'portaladmin_dashboard' %}">Back</a>
     </nav>
   </header>
 
@@ -26,14 +26,14 @@
     </section>
 
     <section class="panel">
-      <div class="toolbar">
+      <form class="toolbar" method="get" action="{% url 'patients_list' %}">
         <div class="search">
-          <input class="input" type="text" placeholder="Search by hospital patient ID or name..." />
+          <input class="input" type="text" name="q" value="{{ query }}" placeholder="Search by name or hospital patient ID..." />
         </div>
         <div class="toolbar-actions">
-          <button class="btn btn-outline" type="button">Search</button>
+          <button class="btn btn-outline" type="submit">Search</button>
         </div>
-      </div>
+      </form>
 
       <div class="table-wrap">
         <table class="table">
@@ -43,34 +43,28 @@
               <th>Hospital Patient ID</th>
               <th>Sex</th>
               <th>Age</th>
-              <th style="width: 220px;">Actions</th>
+              <th style="width: 100px;">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Example Patient</td>
-              <td>PT001</td>
-              <td>Male</td>
-              <td>22</td>
-              <td>
-                <a class="btn btn-small btn-outline" href="#">View</a>
-                <a class="btn btn-small btn-outline" href="#">Edit</a>
-                <a class="btn btn-small btn-danger" href="#">Delete</a>
-              </td>
-            </tr>
-
-            <tr>
-              <td>Example Patient 2</td>
-              <td>PT002</td>
-              <td>Female</td>
-              <td>29</td>
-              <td>
-                <a class="btn btn-small btn-outline" href="#">View</a>
-                <a class="btn btn-small btn-outline" href="#">Edit</a>
-                <a class="btn btn-small btn-danger" href="#">Delete</a>
-              </td>
-            </tr>
-
+{% for p in patients %}
+  <tr>
+    <td>{{ p.full_name|default:p.user.username }}</td>
+    <td>{{ p.hospital_patient_id|default:"—" }}</td>
+    <td>{{ p.get_sex_display|default:"—" }}</td>
+    <td>{{ p.age|default:"—" }}</td>
+    <td>
+      <form method="post" action="{% url 'delete_patient' p.id %}" style="display:inline;" onsubmit="return confirm('Delete {{ p.full_name|default:p.user.username }}? This cannot be undone.');">
+        {% csrf_token %}
+        <button class="btn btn-small btn-danger" type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+{% empty %}
+  <tr>
+    <td colspan="5">No patients found.</td>
+  </tr>
+{% endfor %}
           </tbody>
         </table>
       </div>

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create Employee - Admin - NeuroNest</title>
   <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+  <!-- this page's styles start around line 283 in admin.css -->
 </head>
 <body>
   <header class="topbar">
@@ -26,13 +27,9 @@
     </section>
 
     {% if messages %}
-      <section class="panel" style="margin-bottom: 16px;">
-        {% for message in messages %}
-          <div style="padding:10px; margin-bottom:8px; border-radius:6px; background:#111827; color:#f87171;">
-            {{ message }}
-          </div>
-        {% endfor %}
-      </section>
+      {% for message in messages %}
+        <div class="alert">{{ message }}</div>
+      {% endfor %}
     {% endif %}
 
     <section class="panel">

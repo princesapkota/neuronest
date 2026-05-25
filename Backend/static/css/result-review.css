@@ -1,0 +1,257 @@
+/* -- Shared styles (used by all three result/review pages) ----------------- */
+
+:root{
+  --bg:#0f1013;
+  --card:#17181d;
+  --border:rgba(255,255,255,.08);
+  --text:#ffffff;
+  --muted:#b8bcc6;
+  --primary:#2f6feb;
+  --accent:#ef5350;
+  --shadow:0 18px 70px rgba(0,0,0,.55);
+  --radius:16px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+a{text-decoration:none;color:inherit}
+
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:#12131a;
+  border-bottom:1px solid var(--border);
+  padding:16px 22px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{ display:flex;align-items:center;gap:12px; }
+.brand-mark{
+  width:34px;height:34px;
+  border:3px solid var(--accent);
+  border-right:none;border-bottom:none;
+  position:relative;
+}
+.brand-mark::after{
+  content:"";position:absolute;
+  bottom:-3px;right:-3px;
+  width:60%;height:60%;
+  border:3px solid var(--accent);
+  border-left:none;border-top:none;
+}
+.brand-name{ font-weight:800;font-size:18px; }
+.icon-btn{
+  width:40px;height:40px;border-radius:10px;
+  border:1px solid var(--border);background:transparent;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:.2s;
+}
+.icon-btn:hover{ background:rgba(255,255,255,.08); }
+.icon-btn svg{
+  width:18px;height:18px;fill:none;stroke:white;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+
+.page{
+  max-width:1100px;
+  margin:0 auto;
+  padding:32px 24px 60px;
+}
+
+.page-header{ margin-bottom:28px; }
+.page-title{ font-size:26px;font-weight:800; }
+.page-subtitle{ margin-top:6px;color:var(--muted);font-size:14px; }
+
+.review-layout{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:20px;
+  align-items:start;
+}
+
+.panel-label{
+  font-size:11px;font-weight:700;
+  letter-spacing:.8px;text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+.review-image-panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+
+.image-frame{
+  background:#0d0e12;
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.result-img{
+  width:100%;
+  display:block;
+  object-fit:contain;
+}
+
+.review-right{
+  display:flex;flex-direction:column;gap:16px;
+}
+
+.detail-panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+
+.detail-grid{
+  display:flex;flex-direction:column;gap:4px;
+}
+
+.detail-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.detail-row:last-child{ border-bottom:none; }
+
+.detail-label{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:500;color:var(--muted);
+  white-space:nowrap;
+}
+.detail-label svg{
+  width:13px;height:13px;
+  fill:none;stroke:var(--muted);stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;
+  flex-shrink:0;
+}
+
+.detail-value{
+  font-size:13px;font-weight:600;color:var(--text);
+  text-align:right;
+}
+
+.status-badge{
+  display:inline-flex;align-items:center;
+  padding:3px 10px;border-radius:99px;
+  font-size:12px;font-weight:700;
+}
+.status-pending{
+  background:rgba(251,191,36,.1);color:#fbbf24;
+  border:1px solid rgba(251,191,36,.2);
+}
+.status-reviewed, .status-forwarded{
+  background:rgba(74,222,128,.1);color:#4ade80;
+  border:1px solid rgba(74,222,128,.2);
+}
+.status-rejected{
+  background:rgba(239,83,80,.1);color:#f87171;
+  border:1px solid rgba(239,83,80,.2);
+}
+
+.action-panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+
+.action-hint{
+  font-size:12px;color:var(--muted);
+  margin-bottom:16px;line-height:1.5;
+}
+
+.action-buttons{
+  display:flex;flex-direction:column;gap:10px;
+}
+.action-buttons form{ margin:0; }
+
+.action-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:12px 16px;
+  border-radius:11px;border:1px solid transparent;
+  font-size:14px;font-weight:700;cursor:pointer;
+  transition:background .2s,transform .15s,border-color .2s;
+}
+.action-btn svg{
+  width:16px;height:16px;
+  fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.action-btn:hover{ transform:translateY(-1px); }
+
+.no-image{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:12px;
+  padding:48px 20px;color:var(--muted);
+  min-height:240px;
+}
+.no-image svg{
+  width:40px;height:40px;
+  fill:none;stroke:#2a2d35;stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.no-image p{ font-size:13px; }
+
+@media(max-width:860px){
+  .review-layout{
+    grid-template-columns:1fr;
+  }
+}
+@media(max-width:480px){
+  .page{ padding:20px 16px 48px; }
+}
+
+/* end Shared styles */
+
+
+/* -- employee/result-review.html ------------------------------- */
+
+.reject-btn{
+  background:rgba(239,83,80,.08);
+  color:var(--accent);
+  border-color:rgba(239,83,80,.25);
+}
+.reject-btn:hover{
+  background:var(--accent);color:#fff;
+  border-color:var(--accent);
+}
+
+.forward-btn{
+  background:var(--primary);
+  color:#fff;
+  border-color:var(--primary);
+}
+.forward-btn:hover{ background:#2260d4;border-color:#2260d4; }
+
+/* end employee/result-review.html */
+
+
+/* -- employee/result-detail.html / patient/result-detail.html --------------- */
+
+.back-btn{
+  background:transparent;
+  color:var(--muted);
+  border:1px solid var(--border);
+}
+.back-btn:hover{
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border-color:rgba(255,255,255,.15);
+}
+
+/* end employee/result-detail.html / patient/result-detail.html */

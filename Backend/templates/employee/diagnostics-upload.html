@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start Diagnosis - NeuroNest</title>
+  <link rel="stylesheet" href="{% static 'css/diagnostics-upload.css' %}">
+  <!-- this page's styles start at line 1 in diagnostics-upload.css -->
+</head>
+<body>
+
+  <!-- Processing overlay -->
+  <div class="processing-overlay" id="processingOverlay">
+    <div class="processing-card">
+      <div class="processing-spinner">
+        <svg viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"/>
+        </svg>
+      </div>
+      <p class="processing-title">Running AI Model</p>
+      <p class="processing-sub" id="processingStatus">Preparing scan for analysis...</p>
+      <div class="processing-steps">
+        <div class="processing-step active" id="step1">
+          <div class="step-dot"></div>
+          <span>Uploading file</span>
+        </div>
+        <div class="processing-step" id="step2">
+          <div class="step-dot"></div>
+          <span>Running inference</span>
+        </div>
+        <div class="processing-step" id="step3">
+          <div class="step-dot"></div>
+          <span>Generating report</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <a class="icon-btn" href="{% url 'employee_dashboard' %}" aria-label="Back" title="Back">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+      </a>
+      <div class="brand-mark"></div>
+      <div class="brand-name">NeuroNest</div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page-header">
+      <div class="page-header-icon">
+        <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+      </div>
+      <div>
+        <h1 class="page-title">Start Diagnosis</h1>
+        <p class="page-subtitle">Select a patient, choose the AI model, and upload the scan file.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+
+      {% if form.errors %}
+        <div class="alert">
+          {% for field in form %}{% for error in field.errors %}{{ error }}{% endfor %}{% endfor %}
+          {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="POST" enctype="multipart/form-data" id="uploadForm">
+        {% csrf_token %}
+
+        <div class="form-field">
+          <label class="form-label" for="id_patient">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Patient
+          </label>
+          {{ form.patient }}
+          {% if form.patient.errors %}
+            <span class="form-error">{{ form.patient.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="id_model_type">
+            <svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="10" ry="7"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+            AI Model
+          </label>
+          {{ form.model_type }}
+          <p class="form-hint" id="modelHint">Select a model to see accepted file types.</p>
+          {% if form.model_type.errors %}
+            <span class="form-error">{{ form.model_type.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Scan File
+          </label>
+          <label class="file-drop" id="fileDrop" for="id_input_file">
+            <div class="file-drop-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <p class="file-drop-text" id="fileDropText">Click to select or drag & drop</p>
+            <p class="file-drop-hint" id="fileDropHint">Accepted: .nii / .nii.gz for Brain Tumor &nbsp;·&nbsp; .jpg / .png for others</p>
+            {{ form.input_file }}
+          </label>
+          {% if form.input_file.errors %}
+            <span class="form-error">{{ form.input_file.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          Upload &amp; Analyse
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    // Model hint text
+    const modelSelect = document.getElementById("id_model_type");
+    const modelHint   = document.getElementById("modelHint");
+    const hints = {
+      "brain_tumor": "Accepts .nii or .nii.gz MRI files.",
+      "pneumonia":   "Accepts .jpg / .jpeg / .png chest X-ray images.",
+      "fracture":    "Accepts .jpg / .jpeg / .png X-ray images.",
+    };
+    function updateHint() {
+      modelHint.textContent = hints[modelSelect.value] || "Select a model to see accepted file types.";
+    }
+    modelSelect && modelSelect.addEventListener("change", updateHint);
+    updateHint();
+
+    // File drop label update
+    const fileInput  = document.getElementById("id_input_file");
+    const dropText   = document.getElementById("fileDropText");
+    const fileDrop   = document.getElementById("fileDrop");
+    fileInput && fileInput.addEventListener("change", function() {
+      dropText.textContent = this.files[0] ? this.files[0].name : "Click to select or drag & drop";
+      fileDrop.classList.toggle("has-file", !!this.files[0]);
+    });
+
+    // Drag & drop styling
+    fileDrop && fileDrop.addEventListener("dragover", function(e) {
+      e.preventDefault(); this.classList.add("drag-over");
+    });
+    fileDrop && fileDrop.addEventListener("dragleave", function() {
+      this.classList.remove("drag-over");
+    });
+    fileDrop && fileDrop.addEventListener("drop", function(e) {
+      e.preventDefault(); this.classList.remove("drag-over");
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        dropText.textContent = e.dataTransfer.files[0].name;
+        fileDrop.classList.add("has-file");
+      }
+    });
+
+    // Processing overlay on submit
+    const form    = document.getElementById("uploadForm");
+    const overlay = document.getElementById("processingOverlay");
+    const status  = document.getElementById("processingStatus");
+    const step1   = document.getElementById("step1");
+    const step2   = document.getElementById("step2");
+    const step3   = document.getElementById("step3");
+
+    form && form.addEventListener("submit", function() {
+      overlay.classList.add("show");
+      // Simulate step progression
+      setTimeout(function() {
+        step1.classList.add("done"); step2.classList.add("active");
+        status.textContent = "Running AI inference on scan...";
+      }, 1200);
+      setTimeout(function() {
+        step2.classList.add("done"); step3.classList.add("active");
+        status.textContent = "Generating diagnostic report...";
+      }, 3000);
+    });
+  </script>
+
+</body>
+</html>

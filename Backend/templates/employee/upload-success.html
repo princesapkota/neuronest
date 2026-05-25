@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Upload Saved</title>
+<link rel="stylesheet" href="{% static 'css/employee.css' %}">
+<!-- this page's styles start around line 452 in employee.css -->
+</head>
+
+<body>
+
+<div class="success-box">
+
+<h1 class="success-title">Upload Successful</h1>
+
+<div class="success-info">
+
+<p><strong>Result ID:</strong> {{ result.id }}</p>
+<p><strong>Patient:</strong> {{ result.patient.full_name }}</p>
+<p><strong>Model:</strong> {{ result.get_model_type_display }}</p>
+
+</div>
+
+<a href="{% url 'diagnostics:employee_upload' %}" class="btn outline">
+Upload another scan
+</a>
+
+</div>
+
+</body>
+</html>
