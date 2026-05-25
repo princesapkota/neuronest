@@ -3,6 +3,7 @@ from accounts.models import Profile
 from diagnostics.models import DiagnosticResult
 
 
+# this is one message sent to a patient, usually telling them a new report is ready
 class Notification(models.Model):
     patient = models.ForeignKey(
         Profile,
@@ -11,7 +12,7 @@ class Notification(models.Model):
         limit_choices_to={"role": "patient"},
     )
 
-    # Link notification to a specific result
+    # ties the notification to the exact result it is about
     result = models.ForeignKey(
         DiagnosticResult,
         on_delete=models.CASCADE,
@@ -29,5 +30,6 @@ class Notification(models.Model):
             models.Index(fields=["patient", "is_read", "-created_at"]),
         ]
 
+    # this is the text shown for a notification in the admin site and shell
     def __str__(self):
         return f"{self.title} -> {self.patient.full_name}"
